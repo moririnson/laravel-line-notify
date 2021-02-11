@@ -1,8 +1,8 @@
 <?php
 
-namespace Moririnson\LineNotify\Tests\Mock;
+namespace Moririnson\LINENotify\Tests\Mock;
 
-use Moririnson\LineNotify\Messages\LineNotifyMessage;
+use Moririnson\LINENotify\Messages\LINENotifyMessage;
 use Illuminate\Notifications\Notification;
 
 class TestNotification extends Notification
@@ -50,11 +50,11 @@ class TestNotification extends Notification
      * Notification with LINE Notify.
      *
      * @param mixed $notifiable
-     * @return \Moririnson\LineNotify\Messages\LineNotifyMessage
+     * @return \Moririnson\LineNotify\Messages\LINENotifyMessage
      */
     public function toLINE($notifiable)
     {
-        return (new LineNotifyMessage())
+        return (new LINENotifyMessage())
             ->message($this->message)
             ->imageThumbnail($this->image_thumbnail)
             ->imageFullsize($this->image_fullsize)

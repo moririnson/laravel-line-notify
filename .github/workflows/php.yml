@@ -10,12 +10,17 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        php: ['7.0', '7.1', '7.2', '7.3', '7.4']
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: install
-      run: composer install
+    - name: Set up
+      uses: nanasess/setup-php@master
+    - run: composer install --prefer-dist --no-progress --no-suggest
 
-    - name: test
+    - name: Test
       run: composer test && composer cs

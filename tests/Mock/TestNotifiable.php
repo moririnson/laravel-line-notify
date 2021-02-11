@@ -1,6 +1,6 @@
 <?php
 
-namespace Moririnson\LineNotify\Tests\Mock;
+namespace Moririnson\LINENotify\Tests\Mock;
 
 use Illuminate\Notifications\Notifiable;
 

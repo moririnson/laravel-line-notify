@@ -1,8 +1,8 @@
 <?php
 
-namespace Moririnson\LineNotify\Test;
+namespace Moririnson\LINENotify\Tests\Messages;
 
-use Moririnson\LineNotify\Messages\LineNotifyMessage;
+use Moririnson\LINENotify\Messages\LINENotifyMessage;
 use Orchestra\Testbench\TestCase;
 
 class LineMessageTest extends TestCase
@@ -10,10 +10,10 @@ class LineMessageTest extends TestCase
     public function testMessage()
     {
         $expected = 'test';
-        $message = (new LineNotifyMessage())->message($expected);
+        $message = (new LINENotifyMessage())->message($expected);
         $this->assertEquals($expected, $message->message);
 
-        $this->message = new LineNotifyMessage($expected);
+        $this->message = new LINENotifyMessage($expected);
         $this->assertEquals($expected, $message->message);
     }
 }

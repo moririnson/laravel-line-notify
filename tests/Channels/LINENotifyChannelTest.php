@@ -1,11 +1,10 @@
 <?php
 
-namespace Moririnson\LineNotify\Test;
+namespace Moririnson\LINENotify\Tests\Channels;
 
-use Moririnson\LINENotify\LINENotifyException;
-use Moririnson\LineNotify\Channels\LINENotifyChannel;
-use Moririnson\LineNotify\Tests\Mock\TestNotifiable;
-use Moririnson\LineNotify\Tests\Mock\TestNotification;
+use Moririnson\LINENotify\Channels\LINENotifyChannel;
+use Moririnson\LINENotify\Tests\Mock\TestNotifiable;
+use Moririnson\LINENotify\Tests\Mock\TestNotification;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Mockery;
@@ -15,7 +14,7 @@ class LINENotifyChannelTest extends TestCase
 {
     private $client;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client = Mockery::mock(Client::class);
