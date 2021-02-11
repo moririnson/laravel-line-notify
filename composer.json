@@ -1,0 +1,38 @@
+{
+    "name": "moririnson/laravel-line-notify",
+    "description": "line notify for laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shunsuke Mori",
+            "email": "morimorim7180@gmail.com"
+        }
+    ],
+    "require": {
+    	"php": ">=5.6.4",
+    	"guzzlehttp/guzzle": "~6.0",
+    	"illuminate/notifications": "5.3.*|5.4.*|5.5.*"
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.5",
+        "phpunit/phpunit": "4.*|~6.0",
+        "orchestra/testbench": "3.3.x-dev|^3.5.0",
+        "orchestra/database": "3.3.x-dev|^3.5.0",
+        "squizlabs/php_codesniffer": "3.*"
+    },
+    "autoload": {
+    	"psr-4": {
+    		"Moririnson\\LineNotify\\": "src"
+    	}
+    },
+    "autoload-dev": {
+    	"psr-4": {
+			"Moririnson\\LineNotify\\Tests\\": "tests"
+    	}
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "cs": "./vendor/bin/phpcs"
+    }
+}
