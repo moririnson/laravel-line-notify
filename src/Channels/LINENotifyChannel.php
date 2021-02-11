@@ -44,7 +44,16 @@ class LINENotifyChannel
         }
 
         $params = $notification->toLINE($notifiable);
-        $this->notify($access_token, $params->message);
+        $this->notify(
+            $access_token,
+            $params->message,
+            $params->image_thumbnail,
+            $params->image_fullsize,
+            $params->image_file,
+            $params->sticker_package_id,
+            $params->sticker_id,
+            $params->notification_disabled
+        );
     }
 
     /**
@@ -52,22 +61,39 @@ class LINENotifyChannel
      *
      * @param string $access_token
      * @param string $message
+     * @param string $image_thumbnail
+     * @param string $image_fullsize
+     * @param string $image_file
+     * @param int $sticker_package_id
+     * @param int $sticker_id
+     * @param bool $notification_disabled
      * @throws \Exception
      * @return void
      */
-    private function notify($access_token, $message)
-    {
+    private function notify(
+        $access_token,
+        $message,
+        $image_thumbnail,
+        $image_fullsize,
+        $image_file,
+        $sticker_package_id,
+        $sticker_id,
+        $notification_disabled
+    ) {
         $url = self::API_BASE_URL . self::API_NOTIFY_ENDPOINT;
         $response = $this->client->post($url, [
             'headers' => [
                 'Authorization' => 'Bearer ' . $access_token,
             ],
-            'multipart' => [
-                [
-                    'name' => 'message',
-                    'contents' => $message,
-                ]
-            ],
+            'multipart' => self::buildMultipart(
+                $message,
+                $image_thumbnail,
+                $image_fullsize,
+                $image_file,
+                $sticker_package_id,
+                $sticker_id,
+                $notification_disabled
+            ),
         ]);
 
         $status_code = $response->getStatusCode();
@@ -75,5 +101,59 @@ class LINENotifyChannel
         if ($status_code >= 300 || $status_code < 200) {
             throw new \Exception($body->message);
         }
+    }
+
+    private static function buildMultipart(
+        $message,
+        $image_thumbnail,
+        $image_fullsize,
+        $image_file,
+        $sticker_package_id,
+        $sticker_id,
+        $notification_disabled
+    ) {
+        $multipart = [
+            [
+                'name' => 'message',
+                'contents' => $message,
+            ]
+        ];
+        if (isset($image_thumbnail)) {
+            $multipart[] = [
+                'name' => 'imageThumbnail',
+                'contents' => $image_thumbnail,
+            ];
+        }
+        if (isset($image_fullsize)) {
+            $multipart[] = [
+                'name' => 'imageFullsize',
+                'contents' => $image_fullsize,
+            ];
+        }
+        if (isset($image_file)) {
+            $multipart[] = [
+                'name' => 'imageFile',
+                'contents' => \fopen($image_file, 'r'),
+            ];
+        }
+        if (isset($sticker_package_id)) {
+            $multipart[] = [
+                'name' => 'stickerPackageId',
+                'contents' => $sticker_package_id,
+            ];
+        }
+        if (isset($sticker_id)) {
+            $multipart[] = [
+                'name' => 'stickerId',
+                'contents' => $sticker_id,
+            ];
+        }
+        if (isset($notification_disabled)) {
+            $multipart[] = [
+                'name' => 'notificationDisabled',
+                'contents' => $notification_disabled,
+            ];
+        }
+        return $multipart;
     }
 }
