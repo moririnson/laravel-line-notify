@@ -3,6 +3,7 @@
 namespace Moririnson\LINENotify\Tests\Channels;
 
 use Moririnson\LINENotify\Channels\LINENotifyChannel;
+use Moririnson\LINENotify\Clients\LINENotifyClient;
 use Moririnson\LINENotify\Tests\Mock\TestNotifiable;
 use Moririnson\LINENotify\Tests\Mock\TestNotification;
 use GuzzleHttp\Client;
@@ -17,7 +18,7 @@ class LINENotifyChannelTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client = Mockery::mock(Client::class);
+        $this->client = Mockery::mock(LINENotifyClient::class);
     }
 
     public function testSuccess()
@@ -29,35 +30,18 @@ class LINENotifyChannelTest extends TestCase
         $sticker_id = 1;
         $notification_disabled = false;
         $response = new Response(200);
-        $this->client->shouldReceive('post')
+        $this->client->shouldReceive('notify')
             ->once()
-            ->with(Mockery::any(), [
-                'headers' => [
-                    'Authorization' => 'Bearer '. TestNotifiable::ACCESS_TOKEN,
-                ],
-                'multipart' => [
-                    [
-                        'name' => 'message',
-                        'contents' => $message,
-                    ], [
-                        'name' => 'imageThumbnail',
-                        'contents' => $image_thumbnail,
-                    ], [
-                        'name' => 'imageFullsize',
-                        'contents' => $image_fullsize,
-                    ], [
-                        'name' => 'stickerPackageId',
-                        'contents' => $sticker_package_id,
-                    ], [
-                        'name' => 'stickerId',
-                        'contents' => $sticker_id,
-                    ], [
-                        'name' => 'notificationDisabled',
-                        'contents' => $notification_disabled,
-                    ]
-                ],
-            ])
-            ->andReturn($response);
+            ->with(
+                TestNotifiable::ACCESS_TOKEN,
+                $message,
+                $image_thumbnail,
+                $image_fullsize,
+                null,
+                $sticker_package_id,
+                $sticker_id,
+                $notification_disabled
+            )->andReturn($response);
 
         $channel = new LINENotifyChannel($this->client);
         $notification = new TestNotification(
@@ -75,7 +59,7 @@ class LINENotifyChannelTest extends TestCase
     {
         $message = 'test message.';
         $response = new Response(500);
-        $this->client->shouldReceive('post')
+        $this->client->shouldReceive('notify')
             ->once()
             ->andReturn($response);
 
@@ -92,7 +76,7 @@ class LINENotifyChannelTest extends TestCase
     {
         $message = 'test message.';
         $response = new Response(400);
-        $this->client->shouldReceive('post')
+        $this->client->shouldReceive('notify')
             ->once()
             ->andReturn($response);
 
@@ -109,7 +93,7 @@ class LINENotifyChannelTest extends TestCase
     {
         $message = 'test message.';
         $response = new Response(401);
-        $this->client->shouldReceive('post')
+        $this->client->shouldReceive('notify')
             ->once()
             ->andReturn($response);
 
